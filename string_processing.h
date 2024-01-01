@@ -8,7 +8,7 @@
 template <typename StringContainer>
 std::set<std::string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
     std::set<std::string> non_empty_strings;
-    for (string_view str : strings) {
+    for (std::string_view str : strings) {
         if (!str.empty()) {
             std::string str_const{ str };
             non_empty_strings.insert(str_const);

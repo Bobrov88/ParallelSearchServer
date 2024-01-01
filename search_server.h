@@ -19,7 +19,7 @@ struct Document;
 enum class DocumentStatus;
 using namespace std;
 void PrintDocument(const Document& document);
-void PrintMatchDocumentResult(int document_id, const std::vector<std::string_view>& words, DocumentStatus status);
+void PrintMatchDocumentResult(int document_id, const std::vector<std::string>& words, DocumentStatus status);
 
 class SearchServer {
 public:
