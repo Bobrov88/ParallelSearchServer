@@ -28,14 +28,14 @@ public:
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words))  // Extract non-empty stop words
     {
         if (!std::all_of(stop_words_.begin(), stop_words_.end(), IsValidWord)) {
-            std::string str = "Some of stop words are invalid";
+            //std::string str = "Some of stop words are invalid";
             throw std::invalid_argument("Some of stop words are invalid"s);
         }
     }
 
     
     SearchServer(const std::string& stop_words_text)
-        : SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor
+        : SearchServer(SplitIntoWordsView(stop_words_text))  // Invoke delegating constructor
         // from string container
     {
     }
@@ -85,17 +85,17 @@ private:
         DocumentStatus status;
     };
     
-    const std::set<std::string> stop_words_;
-    std::map<std::string, std::map<int, double>> word_to_document_freqs_;
-    std::map<int, map<string, double>> word_frequencies_;
+    const std::set<std::string_view> stop_words_;
+    std::map<std::string_view, std::map<int, double>> word_to_document_freqs_;
+    std::map<int, map<std::string_view, double>> word_frequencies_;
     std::map<int, DocumentData> documents_;
-    std::map<int, std::set<string>> document_ids_and_words_set_;
+    std::map<int, std::set<std::string_view>> document_ids_and_words_set_;
     std::set<int> documents_id_;
 
-    bool IsStopWord(const std::string& word) const;
+    bool IsStopWord(std::string_view word) const;
 
-    static bool IsValidWord(const std::string& word);
-    std::vector<std::string> SplitIntoWordsNoStop(const std::string& text) const;
+    static bool IsValidWord(std::string_view word);
+    std::vector<std::string_view> SplitIntoWordsNoStop(const std::string& text) const;
     static int ComputeAverageRating(const std::vector<int>& ratings);
         
     struct QueryWord {

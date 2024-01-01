@@ -7,9 +7,9 @@ void SearchServer::AddDocument(int document_id, const std::string& document, Doc
         const auto words = SplitIntoWordsNoStop(document);
 
         const double inv_word_count = 1.0 / words.size();
-        for (const string& word : words) {
+        for (string_view word : words) {
             word_to_document_freqs_[word][document_id] += inv_word_count;
-            word_frequencies_[document_id][word] ++;
+            word_frequencies_[document_id][word]++;
             document_ids_and_words_set_[document_id].insert(word);
             documents_id_.insert(document_id);
         }
@@ -90,22 +90,22 @@ void SearchServer::AddDocument(int document_id, const std::string& document, Doc
         return MatchDocument(std::execution::seq, raw_query, document_id);
     }
 
-    bool SearchServer::IsStopWord(const std::string& word) const {
+    bool SearchServer::IsStopWord(std::string_view word) const {
         return stop_words_.count(word) > 0;
     }
 
-    bool SearchServer::IsValidWord(const std::string& word) {
+    bool SearchServer::IsValidWord(std::string_view word) {
         // A valid word must not contain special characters
         return none_of(word.begin(), word.end(), [](char c) {
             return c >= '\0' && c < ' ';
             });
     }
 
-    std::vector<std::string> SearchServer::SplitIntoWordsNoStop(const std::string& text) const {
-        std::vector<std::string> words;
-        for (const std::string& word : SplitIntoWords(text)) {
+    std::vector<std::string_view> SearchServer::SplitIntoWordsNoStop(const std::string& text) const {
+        std::vector<std::string_view> words;
+        for (const std::string_view word : SplitIntoWordsView(text)) {
             if (!IsValidWord(word)) {
-                throw std::invalid_argument("Word "s + word + " is invalid"s);
+                throw std::invalid_argument("Word "s + word.data() + " is invalid"s);
             }
             if (!IsStopWord(word)) {
                 words.push_back(word);
