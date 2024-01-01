@@ -22,7 +22,7 @@
 //    return words;
 //}
 
-std::vector<std::string_view> SplitIntoWordsView(const std::string& str) {
+std::vector<std::string_view> SplitIntoWordsView(std::string_view str) {
     std::vector<std::string_view> result;
     // 1
     int64_t pos = str.find_first_not_of(" ");
@@ -33,7 +33,8 @@ std::vector<std::string_view> SplitIntoWordsView(const std::string& str) {
         // 4
         int64_t space = str.find(' ', pos);
         // 5
-        result.push_back(space == pos_end ? str.substr(pos) : str.substr(pos, space - pos));
+        std::string_view strv(str.data() + pos, (space == pos_end) ? str.size() - pos : space - pos);
+        result.push_back(strv);
         // 6
         pos = str.find_first_not_of(" ", space);
     }

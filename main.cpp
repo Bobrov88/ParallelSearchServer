@@ -41,6 +41,5 @@ int main() {
         cout << words.size() << " words for document 3"s << endl;
         // 0 words for document 3
     }
-
     return 0;
 }
